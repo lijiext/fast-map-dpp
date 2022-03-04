@@ -59,4 +59,6 @@ while len(selected_items) < max_length:
     if di2s[selected_item] < epsilon:
         break
     selected_items.append(selected_item)
-print("selected_items:", selected_items)
+print('scores:', scores)
+print('selected_items_index:', selected_items)
+print("selected_items_value:", scores[selected_items])
