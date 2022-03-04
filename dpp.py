@@ -4,17 +4,27 @@ import math
 
 def dpp(kernel_matrix, max_length, epsilon=1E-10):
     """
+    我们提出了一个更快实现的贪心算法
     Our proposed fast implementation of the greedy algorithm
+    入参：一个二维数组，表示高斯核矩阵
     :param kernel_matrix: 2-d array
+    入参：一个正整数，表示最大长度
     :param max_length: positive int
+    入参：一个小数，表示精度
     :param epsilon: small positive scalar
+    出参：一个列表，表示选择的物品
     :return: list
     """
+
     item_size = kernel_matrix.shape[0]
     cis = np.zeros((max_length, item_size))
     di2s = np.copy(np.diag(kernel_matrix))
+    print("kaishi")
+    print(di2s)
     selected_items = list()
+    print(selected_items)
     selected_item = np.argmax(di2s)
+    print("selected_item:" , selected_item)
     selected_items.append(selected_item)
     while len(selected_items) < max_length:
         k = len(selected_items) - 1
