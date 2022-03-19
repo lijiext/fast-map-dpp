@@ -21,9 +21,10 @@ print('scores:', scores)
 feature_vectors = np.random.randn(item_size, feature_dimension)
 print('feature_vectors:', feature_vectors, sep='\n')
 
-# 处理？
+# feature_vectors 的 l2 范式
+# sqrt()
 feature_vectors = feature_vectors / np.linalg.norm(feature_vectors, axis=1, keepdims=True)
-print('feature_vectors:', feature_vectors, sep='\n')
+print('l2_norm_feature_vectors:', feature_vectors, sep='\n')
 
 # 根据特征向量矩阵，求相似矩阵
 similarities = np.dot(feature_vectors, feature_vectors.T)
