@@ -1,4 +1,4 @@
-Response Time,Availability,Throughput,Successability,Reliability,Compliance,Best Practices,"Latency	",Documentation,Service Name,WSDL Address
+Response Time,Availability,Throughput,Successability,Reliability,Compliance,Best Practices,"Latency",Documentation,Service Name,WSDL Address
 302.75,89,7.1,90,73,78,80,187.75,32,MAPPMatching,http://xml.assessment.com/service/MAPPMatching.asmx?wsdl
 482,85,16,95,73,100,84,1,2,Compound2,http://www.mssoapinterop.org/asmx/WSDL/compound2.wsdl
 3321.4,89,1.4,96,73,78,80,2.6,96,USDAData,http://www.strikeiron.com/webservices/usdadata.asmx?wsdl
