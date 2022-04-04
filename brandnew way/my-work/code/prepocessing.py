@@ -57,6 +57,8 @@ if __name__ == '__main__':
   print(f'constrains_service: \n{constrains_service}\nconstrains_service.shape: \n{constrains_service.shape}')
   print(f'candidates_service: \n{candidates_service}\ncandidates_service.shape: \n{candidates_service.shape}')
   [print(f'item_length:{len(item)}') for item in histories]
+  print(f'histories: \n{histories}')
+  print(f'histories.shape: \n{np.asarray(histories).shape}')
   pickle_path = os.path.join(home_path, 'qws.pickle')
   with open(pickle_path, 'wb') as f:
     pickle.dump(constrains_service, f)
