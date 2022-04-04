@@ -32,10 +32,16 @@ def get_thresholds(Candidates=None, alph=0.5):
 
 
 def get_shannon_entropy(user_call_histories):
-  for item in user_call_histories:
-    indexs = [np.argmax[i] for i in item]
-    count = Counter(indexs)
-    print(count)
+  """
+  :param user_call_histories: 用户的服务调用历史记录
+  :rtype list: 服务调用记录的熵值
+  """
+  indexs = [[np.argmax(i) for i in item] for item in user_call_histories]
+  shannon_entropies = []
+  for item in indexs:
+    shannon_entropy = sum([count / len(item) * (math.log2(count / len(item))) for count in Counter(item).values()])
+    shannon_entropies.append(shannon_entropy)
+  return shannon_entropies
 
 
 if __name__ == '__main__':
