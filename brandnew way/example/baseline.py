@@ -450,6 +450,8 @@ if __name__ == '__main__':
         Div_arr[4, index] = div
         RMSDE = rmsde(results, history,top_k)
         RMSDE_arr[4, index] = RMSDE
+
+
         # (6) 调用DPP方法
         kernel_matrix=Kmatrix(constraint=Sr,candidate=Services,fu=1,alpha=a0)
         results_DPP=dpp(kernel_matrix,top_k)
@@ -461,6 +463,8 @@ if __name__ == '__main__':
         Div_arr[5, index] = div
         RMSDE = rmsde(results, history,top_k)
         RMSDE_arr[5, index] = RMSDE
+
+        
         # (7) 调用PDPP方法
         kernel_matrix=Kmatrix(constraint=Sr,candidate=Services,fu=fus[0],alpha=a0)
         results_PDPP = dpp(kernel_matrix, top_k)
