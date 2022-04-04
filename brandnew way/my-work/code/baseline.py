@@ -3,6 +3,7 @@ from itertools import combinations
 from scipy import spatial
 from scipy import stats
 from tqdm import tqdm
+from collections import Counter
 
 home_path = os.path.dirname(os.path.abspath(__file__))
 pkl_path = os.path.join(home_path, 'qws.pickle')
@@ -30,13 +31,23 @@ def get_thresholds(Candidates=None, alph=0.5):
   return thresh_sim
 
 
+def get_shannon_entropy(user_call_histories):
+  for item in user_call_histories:
+    indexs = [np.argmax[i] for i in item]
+    count = Counter(indexs)
+    print(count)
+
+
 if __name__ == '__main__':
   with open(pkl_path, 'rb') as f:
     constrains_service = pickle.load(f)
     candidates_service = pickle.load(f)
     histories = pickle.load(f)
     f.close()
-  thresholds = get_thresholds(candidates_service, alph=0.5)
+  # 计算相似度门槛，80% 的数据小于此值
+
+  # thresholds = get_thresholds(candidates_service, alph=0.5)
+  thresholds = 0.7122821713107376
   print('thresholds:', thresholds)
   # 构建约束集
   constrains_index = np.random.randint(0, len(constrains_service), 1)

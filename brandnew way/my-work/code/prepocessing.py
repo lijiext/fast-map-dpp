@@ -4,6 +4,8 @@ np.set_printoptions(linewidth=400)
 
 home_path = os.path.dirname(os.path.abspath(__file__))
 QWS_file_path = os.path.join(home_path, 'qws2.CSV')
+
+
 def divide_datasets(num_of_constrains=6):
   data = pd.read_table(QWS_file_path, header=None, delimiter=',')
   pd_data = data.iloc[1:, :8].values.astype(float)
@@ -19,7 +21,7 @@ def divide_datasets(num_of_constrains=6):
   # 正负属性，如延迟越高越不好
   pos_or_neg = ['-', '+', '+', '+', '+', '+', '+', '-']
   for (index, value) in enumerate(pos_or_neg):
-    if value == '-': # 如果是负属性，改变方向
+    if value == '-':  # 如果是负属性，改变方向
       pd_data[:, index] = (pd_data[:, index] - column_min[index]) / (column_max[index] - column_min[index])
     else:
       pd_data[:, index] = (column_max[index] - pd_data[:, index]) / (column_max[index] - column_min[index])
@@ -56,7 +58,8 @@ if __name__ == '__main__':
   histories = generate_histories(10, candidates_service)
   print(f'constrains_service: \n{constrains_service}\nconstrains_service.shape: \n{constrains_service.shape}')
   print(f'candidates_service: \n{candidates_service}\ncandidates_service.shape: \n{candidates_service.shape}')
-  [print(f'item_length:{len(item)}') for item in histories]
+  # [print(f'item_length:{len(item)}') for item in histories]
+  [print(f'history:\n{history}') for history in histories]
   pickle_path = os.path.join(home_path, 'qws.pickle')
   with open(pickle_path, 'wb') as f:
     pickle.dump(constrains_service, f)
