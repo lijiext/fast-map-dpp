@@ -315,7 +315,6 @@ def Kmatrix(constraint=None,candidate=None,fu=None,alpha=None):
             if(j==k):
                 kernel_matrix[j][k]=scores[j]*scores[k]
             else:
-
                 kernel_matrix[j][k] = fu * alpha * scores[j] * scores[k] * get_cos_similar(candidate[j], candidate[k])
     return kernel_matrix
 
