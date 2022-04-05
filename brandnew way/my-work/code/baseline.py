@@ -1,5 +1,5 @@
 import numpy as np, pickle, math, os
-from itertools import combinations
+from itertools import combinations, permutations
 from scipy import spatial
 from scipy import stats
 from tqdm import tqdm
@@ -31,17 +31,42 @@ def get_thresholds(Candidates=None, alph=0.5):
   return thresh_sim
 
 
-def get_shannon_entropy(user_call_histories):
+def get_shannon_entropies(user_call_histories):
   """
   :param user_call_histories: 用户的服务调用历史记录
-  :rtype list: 服务调用记录的熵值
+  :rtype list: 服务调用记录的熵值列表
   """
   indexs = [[np.argmax(i) for i in item] for item in user_call_histories]
   shannon_entropies = []
   for item in indexs:
-    shannon_entropy = sum([count / len(item) * (math.log2(count / len(item))) for count in Counter(item).values()])
+    shannon_entropy = np.abs(
+      sum([count / len(item) * (math.log2(count / len(item))) for count in Counter(item).values()]))
     shannon_entropies.append(shannon_entropy)
-  return shannon_entropies
+  return np.asarray(shannon_entropies)
+
+
+def get_diversity_parameter(shannon_entropies, H0=1):
+  """
+  根据服务调用历史记录信息熵计算多样性程度
+  :param shannon_entropies: 用户的服务调用历史记录多样性熵值列表
+  :param H0: 超参数
+  :return: 每一个用户的多样化程度
+  """
+  H_max = np.max(shannon_entropies)
+  H_min = np.min(shannon_entropies)
+  return np.asarray([(item - H_min + H0) / (H_max - H_min + H0) for item in shannon_entropies])
+
+
+def get_similarity(item1, item2, alpha=0.5, dimensions=8.0):
+  distance = spatial.distance.euclidean(item1, item2)
+  tau = stats.kendalltau(item1, item2).correlation
+  similarity = alpha * (1.0 - distance / np.sqrt(dimensions)) + (1.0 - alpha) * tau
+  return similarity
+
+
+def get_diversity_of_list(hlist, alpha=0.5, dimensions=8.0):
+  return 2 / (len(hlist) * (len(hlist) - 1)) * np.sum(
+    [1 - get_similarity(hlist[i], hlist[j], alpha, dimensions) for i, j in list(permutations(range(len(hlist)), 2))])
 
 
 if __name__ == '__main__':
@@ -53,6 +78,7 @@ if __name__ == '__main__':
   # 计算相似度门槛，80% 的数据小于此值
 
   # thresholds = get_thresholds(candidates_service, alph=0.5)
+  # 0.7898718519689361
   thresholds = 0.7122821713107376
   print('thresholds:', thresholds)
   # 构建约束集
@@ -60,3 +86,10 @@ if __name__ == '__main__':
   dimensions = 3
   sr = constrains_service[constrains_index, dimensions]
   print(f"constrains_index: {constrains_index}\ndimensions: {dimensions}\nsr: {sr}")
+
+  # 计算调用历史记录的信息熵(多样性)
+  shannon_entropies = get_shannon_entropies(histories)
+  # 归一化
+  diversity_parameter = get_diversity_parameter(shannon_entropies)
+  # 计算调用历史记录多样性程度
+  print([get_diversity_of_list(item) for item in histories])
