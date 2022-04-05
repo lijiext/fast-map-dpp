@@ -64,6 +64,20 @@ def get_similarity(item1, item2, alpha=0.5, dimensions=8.0):
   return similarity
 
 
+def get_kernel_matrix(constrains_service, candidate_service, fu, alpha):
+  similarities = np.asarray([get_similarity(item, constrains_service) for item in candidate_service])
+  kernel_matrix = np.diag(np.square(similarities))
+  for (i, j) in tqdm(list(combinations(range(len(candidate_service)), 2))):
+    if i == j:
+      continue
+    kernel_matrix[i, j] = fu * alpha * similarities[i] * similarities[j] * get_similarity(candidate_service[i],
+                                                                                          candidate_service[j])
+    kernel_matrix[j, i] = kernel_matrix[i, j]
+  return kernel_matrix
+
+def dpp():
+  pass
+
 def get_diversity_of_list(hlist, alpha=0.5, dimensions=8.0):
   return 2 / (len(hlist) * (len(hlist) - 1)) * np.sum(
     [1 - get_similarity(hlist[i], hlist[j], alpha, dimensions) for i, j in list(permutations(range(len(hlist)), 2))])
