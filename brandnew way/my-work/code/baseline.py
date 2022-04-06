@@ -67,12 +67,13 @@ def get_similarity(item1, item2, alpha=0.5, dimensions=8.0):
 def get_kernel_matrix(constrains_service, candidate_service, fu, alpha):
   similarities = np.asarray([get_similarity(item, constrains_service) for item in candidate_service])
   kernel_matrix = np.diag(np.square(similarities))
-  for (i, j) in tqdm(list(combinations(range(len(candidate_service)), 2))):
-    if i == j:
-      continue
+  print(f'generated kernel matrix, shape: {kernel_matrix.shape} \n {kernel_matrix}')
+  comb = list(combinations(range(len(candidate_service)), 2))
+  for (i, j) in tqdm(comb, desc=f'fu: {fu} alpha: {alpha} calculating kernel matrix elements'):
     kernel_matrix[i, j] = fu * alpha * similarities[i] * similarities[j] * get_similarity(candidate_service[i],
                                                                                           candidate_service[j])
     kernel_matrix[j, i] = kernel_matrix[i, j]
+  print(f'created kernel matrix: {kernel_matrix}')
   return kernel_matrix
 
 def dpp():
